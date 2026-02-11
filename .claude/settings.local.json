@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:cheatsheetseries.owasp.org)",
+      "WebFetch(domain:pages.nist.gov)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(pg_isready:*)",
+      "Bash(redis-cli ping:*)",
+      "Bash(pip install:*)",
+      "Bash(where:*)",
+      "Bash(python -m pip:*)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(curl:*)",
+      "Bash(npx tsc:*)",
+      "Bash(python -m ruff check:*)",
+      "Bash(npx eslint:*)",
+      "Bash(node -e:*)",
+      "Bash(npx vite build)",
+      "Bash(python -m pytest:*)",
+      "Bash(npx vitest:*)",
+      "Bash(python:*)"
+    ]
+  }
+}

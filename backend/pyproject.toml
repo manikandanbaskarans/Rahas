@@ -1,0 +1,59 @@
+[project]
+name = "vaultkeeper"
+version = "1.0.0"
+description = "Enterprise Password & Key Management Application"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "alembic>=1.14.0",
+    "aiosqlite>=0.20.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "python-jose[cryptography]>=3.3.0",
+    "bcrypt>=4.2.0",
+    "passlib[bcrypt]>=1.7.4",
+    "pyotp>=2.9.0",
+    "python-multipart>=0.0.12",
+    "httpx>=0.28.0",
+    "email-validator>=2.2.0",
+]
+
+[project.optional-dependencies]
+redis = ["celery[redis]>=5.4.0", "redis>=5.2.0"]
+postgres = ["asyncpg>=0.30.0"]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "httpx>=0.28.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "S", "B"]
+ignore = [
+    "S101",   # assert usage (fine in tests)
+    "S106",   # hardcoded password in function arg
+    "S105",   # false positive on field names containing "password"/"token"
+    "S107",   # false positive on default param names containing "password"/"secret"
+    "B008",   # function call in default arg (standard FastAPI Depends() pattern)
+    "UP042",  # replace StrEnum (keep for SQLAlchemy compatibility)
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
