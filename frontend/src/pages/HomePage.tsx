@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useVaultStore } from '@/store/vaultStore';
 import { vaultAPI } from '@/api/client';
@@ -21,11 +21,7 @@ export function HomePage() {
   const [creatingVault, setCreatingVault] = useState(false);
   const [newVaultName, setNewVaultName] = useState('');
 
-  useEffect(() => {
-    loadDashboard();
-  }, []);
-
-  const loadDashboard = async () => {
+  const loadDashboard = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await vaultAPI.list();
@@ -39,7 +35,11 @@ export function HomePage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [setVaults]);
+
+  useEffect(() => {
+    loadDashboard();
+  }, [loadDashboard]);
 
   const handleCreateVault = async () => {
     if (!vaultKey || !newVaultName.trim()) return;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useVaultStore } from '@/store/vaultStore';
 import { tagsAPI } from '@/api/client';
 import { Button } from '@/components/ui/button';
@@ -11,18 +11,18 @@ export function TagsSidebar() {
   const [newName, setNewName] = useState('');
   const [newColor, setNewColor] = useState('#6366f1');
 
-  useEffect(() => {
-    loadTags();
-  }, []);
-
-  const loadTags = async () => {
+  const loadTags = useCallback(async () => {
     try {
       const response = await tagsAPI.list();
       setTags(response.data);
     } catch {
       // silently fail
     }
-  };
+  }, [setTags]);
+
+  useEffect(() => {
+    loadTags();
+  }, [loadTags]);
 
   const handleCreate = async () => {
     if (!newName.trim()) return;

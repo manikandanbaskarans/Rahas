@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { secretsAPI } from '@/api/client';
 import { decryptSecretBundle } from '@/crypto/keyHierarchy';
@@ -12,11 +12,7 @@ export function ArchiveView() {
   const [secrets, setSecrets] = useState<DecryptedSecret[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadArchived();
-  }, []);
-
-  const loadArchived = async () => {
+  const loadArchived = useCallback(async () => {
     if (!vaultKey) return;
     setIsLoading(true);
     try {
@@ -51,7 +47,11 @@ export function ArchiveView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [vaultKey]);
+
+  useEffect(() => {
+    loadArchived();
+  }, [loadArchived]);
 
   const handleUnarchive = async (id: string) => {
     try {

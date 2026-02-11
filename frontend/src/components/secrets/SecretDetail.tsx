@@ -85,7 +85,6 @@ const fieldLabels: Record<string, string> = {
 
 export function SecretDetail({
   secret,
-  onClose: _onClose,
   onDelete,
   onShare,
   onToggleFavorite,

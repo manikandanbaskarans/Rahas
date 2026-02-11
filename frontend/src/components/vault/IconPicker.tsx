@@ -100,6 +100,7 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getVaultIcon(iconName: string) {
   return icons.find((i) => i.name === iconName)?.Icon || FolderLock;
 }

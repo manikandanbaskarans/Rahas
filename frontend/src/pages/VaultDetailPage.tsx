@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { vaultAPI } from '@/api/client';
@@ -70,11 +70,7 @@ export function VaultDetailPage() {
   const [icon, setIcon] = useState('folder-lock');
   const [safeForTravel, setSafeForTravel] = useState(false);
 
-  useEffect(() => {
-    if (vaultId) loadVaultDetail();
-  }, [vaultId]);
-
-  const loadVaultDetail = async () => {
+  const loadVaultDetail = useCallback(async () => {
     if (!vaultKey || !vaultId) return;
     setIsLoading(true);
     try {
@@ -104,7 +100,11 @@ export function VaultDetailPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [vaultKey, vaultId]);
+
+  useEffect(() => {
+    if (vaultId) loadVaultDetail();
+  }, [vaultId, loadVaultDetail]);
 
   const handleSave = async () => {
     if (!vaultKey || !vaultId) return;

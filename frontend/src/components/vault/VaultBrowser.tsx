@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useVaultStore } from '@/store/vaultStore';
 import { vaultAPI, secretsAPI } from '@/api/client';
@@ -77,17 +77,7 @@ export function VaultBrowser({ onAddSecret, onSelectSecret }: VaultBrowserProps)
   const [creatingVault, setCreatingVault] = useState(false);
   const [newVaultName, setNewVaultName] = useState('');
 
-  useEffect(() => {
-    loadVaults();
-  }, []);
-
-  useEffect(() => {
-    if (currentVault && vaultKey) {
-      loadSecrets(currentVault.id);
-    }
-  }, [currentVault, vaultKey]);
-
-  const loadVaults = async () => {
+  const loadVaults = useCallback(async () => {
     try {
       const response = await vaultAPI.list();
       setVaults(response.data.vaults);
@@ -97,9 +87,9 @@ export function VaultBrowser({ onAddSecret, onSelectSecret }: VaultBrowserProps)
     } catch (err) {
       console.error('Failed to load vaults:', err);
     }
-  };
+  }, [setVaults, setCurrentVault, currentVault]);
 
-  const loadSecrets = async (vaultId: string) => {
+  const loadSecrets = useCallback(async (vaultId: string) => {
     if (!vaultKey) return;
     setLoading(true);
 
@@ -152,7 +142,17 @@ export function VaultBrowser({ onAddSecret, onSelectSecret }: VaultBrowserProps)
     } finally {
       setLoading(false);
     }
-  };
+  }, [vaultKey, setLoading, setSecrets]);
+
+  useEffect(() => {
+    loadVaults();
+  }, [loadVaults]);
+
+  useEffect(() => {
+    if (currentVault && vaultKey) {
+      loadSecrets(currentVault.id);
+    }
+  }, [currentVault, vaultKey, loadSecrets]);
 
   const handleCreateVault = async () => {
     if (!vaultKey || !newVaultName.trim()) return;

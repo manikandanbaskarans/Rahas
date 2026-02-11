@@ -33,6 +33,7 @@ export function SettingsPage() {
 
   useEffect(() => {
     loadVaultsForTravel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadVaultsForTravel = async () => {

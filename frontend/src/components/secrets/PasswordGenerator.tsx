@@ -47,6 +47,7 @@ export function PasswordGenerator() {
 
   useEffect(() => {
     generate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCopy = async () => {

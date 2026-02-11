@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { useVaultStore } from '@/store/vaultStore';
@@ -27,11 +27,7 @@ export function CheckpostPage() {
   const [securityScore, setSecurityScore] = useState<SecurityScore | null>(null);
   const [breachCount, setBreachCount] = useState(0);
 
-  useEffect(() => {
-    runSecurityScan();
-  }, []);
-
-  const runSecurityScan = async () => {
+  const runSecurityScan = useCallback(async () => {
     if (!vaultKey) return;
     setIsLoading(true);
 
@@ -92,7 +88,11 @@ export function CheckpostPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [vaultKey, setVaults]);
+
+  useEffect(() => {
+    runSecurityScan();
+  }, [runSecurityScan]);
 
   const handleBreachCheck = async () => {
     setIsCheckingBreaches(true);

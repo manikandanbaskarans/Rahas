@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { secretsAPI } from '@/api/client';
 import { decryptSecretBundle } from '@/crypto/keyHierarchy';
@@ -20,11 +20,7 @@ export function RecentlyDeleted() {
   const [secrets, setSecrets] = useState<DecryptedSecret[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadDeleted();
-  }, []);
-
-  const loadDeleted = async () => {
+  const loadDeleted = useCallback(async () => {
     if (!vaultKey) return;
     setIsLoading(true);
     try {
@@ -59,7 +55,11 @@ export function RecentlyDeleted() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [vaultKey]);
+
+  useEffect(() => {
+    loadDeleted();
+  }, [loadDeleted]);
 
   const handleRestore = async (id: string) => {
     try {

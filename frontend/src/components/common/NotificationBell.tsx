@@ -21,13 +21,13 @@ export function NotificationBell() {
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchUnreadCount]);
 
   useEffect(() => {
     if (open) {
       fetchNotifications();
     }
-  }, [open]);
+  }, [open, fetchNotifications]);
 
   // Close on outside click
   useEffect(() => {

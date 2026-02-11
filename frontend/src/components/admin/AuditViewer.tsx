@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { adminAPI } from '@/api/client';
 import type { AuditLog } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,7 @@ export function AuditViewer() {
   const [isLoading, setIsLoading] = useState(false);
   const pageSize = 20;
 
-  const loadLogs = async () => {
+  const loadLogs = useCallback(async () => {
     if (!orgId) return;
     setIsLoading(true);
     try {
@@ -31,11 +31,11 @@ export function AuditViewer() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [orgId, page, pageSize, actionFilter]);
 
   useEffect(() => {
     if (orgId) loadLogs();
-  }, [orgId, page, actionFilter]);
+  }, [orgId, page, actionFilter, loadLogs]);
 
   const totalPages = Math.ceil(total / pageSize);
 

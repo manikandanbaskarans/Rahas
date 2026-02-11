@@ -4,7 +4,8 @@
  * when no longer needed.
  */
 
-export function clearString(_str: string): void {
+export function clearString(str?: string): void {
+  void str;
   // JavaScript strings are immutable - this is a best-effort approach.
   // In practice, we rely on garbage collection and avoid storing
   // sensitive strings in long-lived references.
