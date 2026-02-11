@@ -50,6 +50,9 @@ ignore = [
     "UP042",  # replace StrEnum (keep for SQLAlchemy compatibility)
 ]
 
+[tool.ruff.lint.per-file-ignores]
+"migrations/**" = ["E501", "UP007", "UP035"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
